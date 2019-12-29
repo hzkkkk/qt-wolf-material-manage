@@ -1,9 +1,9 @@
-#include "model_Database.h"
-
-#include "mainwindow.h"
 #include <QApplication>
 #include <QDialog>
 #include <QtWidgets>
+
+#include "model_accessDatabase.h"
+#include "view_startPage.h"
 
 int main(int argc, char *argv[])
 {

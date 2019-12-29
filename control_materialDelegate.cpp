@@ -48,7 +48,7 @@
 **
 ****************************************************************************/
 
-#include "controller_showTableDelegate.h"
+#include "control_materialDelegate.h"
 
 #include <QtWidgets>
 

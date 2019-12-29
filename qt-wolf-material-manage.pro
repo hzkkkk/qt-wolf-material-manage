@@ -24,30 +24,28 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        mainwindow.cpp \
-    aboutDialog.cpp \
-    middleware_userAuthentication.cpp \
-    model_Database.cpp \
     main.cpp \
-    view_showTableDialog.cpp \
-    model_Table.cpp \
-    controller_showTableDelegate.cpp
+    view_startPage.cpp \
+    view_aboutDialog.cpp \
+    control_materialDelegate.cpp \
+    model_showTableDialog.cpp \
+    model_accessDatabase.cpp \
+    config_configuration.cpp \
+    middleware_userAuthentication.cpp
 
 HEADERS += \
-        mainwindow.h \
-    aboutDialog.h \
     middleware_userAuthentication.h \
-    model_Database.h \
-    Configuration.h \
-    view_showTableDialog.h \
-    model_Table.h \
-    controller_showTableDelegate.h
+    view_startPage.h \
+    view_aboutDialog.h \
+    control_materialDelegate.h \
+    model_showTableDialog.h \
+    model_accessDatabase.h \
+    config_configuration.h
 
 FORMS += \
-        mainwindow.ui \
-    contactDialog.ui \
-    aboutDialog.ui \
-    TableDialog.ui
+    view_aboutDialog.ui \
+    view_startPage.ui \
+    model_showTableDialog.ui
 
 
 RESOURCES   =  material.qrc

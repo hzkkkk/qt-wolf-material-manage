@@ -14,13 +14,13 @@ class ShowTableDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ShowTableDialog(QWidget *parent = 0,uint16_t table_selected = 0);
+    explicit ShowTableDialog(QWidget *parent = 0,QString table_selected = 0);
     ~ShowTableDialog();
 
 private:
     Ui::ShowTableDialog *ui;
 
-    uint16_t m_table_selected = 0;
+    QString m_table_selected = "no table";
 
     QSqlRelationalTableModel *model;
     void initUI(Ui::ShowTableDialog *ui);
@@ -30,6 +30,8 @@ private:
     void customColumnName();
     void customDataWidget(QDataWidgetMapper *mapper);
     void showError(const QSqlError &err);
+
+    void stylizeWidget();
 };
 
 #endif // SHOWMATERIALDIALOG_H

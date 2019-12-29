@@ -1,5 +1,5 @@
-#include "Configuration.h"
-#include "model_Database.h"
+#include "config_configuration.h"
+#include "model_accessDatabase.h"
 
 
 QSqlDatabase model_Database::s_db = QSqlDatabase::addDatabase(DATABASEDRIVER);

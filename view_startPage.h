@@ -2,8 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "aboutDialog.h"
-#include "view_showTableDialog.h"
+
+#include "config_configuration.h"
+#include "model_showTableDialog.h"
+
+#include "view_aboutDialog.h"
 
 namespace Ui {
 class MainWindow;
