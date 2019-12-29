@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ShowMaterialDialog</class>
- <widget class="QDialog" name="ShowMaterialDialog">
+ <class>ShowTableDialog</class>
+ <widget class="QDialog" name="ShowTableDialog">
   <property name="geometry">
    <rect>
     <x>0</x>

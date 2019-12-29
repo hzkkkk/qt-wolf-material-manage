@@ -3,7 +3,7 @@
 #include "model_showTableDialog.h"
 #include "config_configuration.h"
 #include "control_materialDelegate.h"
-#include "ui_MaterialDialog.h"
+#include "ui_model_showTableDialog.h"
 
 ShowTableDialog::ShowTableDialog(QWidget *parent, QString table_selected) :
     QDialog(parent),
@@ -12,8 +12,7 @@ ShowTableDialog::ShowTableDialog(QWidget *parent, QString table_selected) :
     ui->setupUi(this);
     m_table_selected = table_selected;
     initUI(ui);
-     qDebug() << "running QPushButton";
-    //stylizeWidget();
+    stylizeWidget();
 }
 
 
@@ -164,8 +163,3 @@ void ShowTableDialog::stylizeWidget()
                             "QPushButton:pressed { background: #5C8BB0; border-style: inset;}");
     }
 }
-
-
-
-
-

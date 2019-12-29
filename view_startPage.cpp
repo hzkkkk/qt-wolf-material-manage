@@ -1,5 +1,5 @@
 #include "view_startPage.h"
-#include "ui_startPage.h"
+#include "ui_view_startPage.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

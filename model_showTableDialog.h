@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QtWidgets>
 #include <QtSql>
+#include "middleware_userAuthentication.h"
 
 namespace Ui {
 class ShowTableDialog;
@@ -16,6 +17,7 @@ class ShowTableDialog : public QDialog
 public:
     explicit ShowTableDialog(QWidget *parent = 0,QString table_selected = 0);
     ~ShowTableDialog();
+
 
 private:
     Ui::ShowTableDialog *ui;
@@ -32,6 +34,13 @@ private:
     void showError(const QSqlError &err);
 
     void stylizeWidget();
+
+
+    //middleware
+    inline boolean authentication(UserAuthentication neededAuthority, UserAuthentication currentAuthority)
+    {
+        return (neededAuthority == currentAuthority ) ? TRUE : FALSE;
+    }
 };
 
 #endif // SHOWMATERIALDIALOG_H
