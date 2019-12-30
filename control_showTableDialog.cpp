@@ -1,9 +1,9 @@
 #include <QtSql>
 
-#include "model_showTableDialog.h"
+#include "control_showTableDialog.h"
 #include "config_configuration.h"
 #include "control_materialDelegate.h"
-#include "ui_model_showTableDialog.h"
+#include "ui_control_showTableDialog.h"
 
 ShowTableDialog::ShowTableDialog(QWidget *parent, QString table_selected) :
     QDialog(parent),
@@ -11,10 +11,9 @@ ShowTableDialog::ShowTableDialog(QWidget *parent, QString table_selected) :
 {
     ui->setupUi(this);
     m_table_selected = table_selected;
-    initUI(ui);
+    initUI();
     stylizeWidget();
 }
-
 
 ShowTableDialog::~ShowTableDialog()
 {
@@ -22,7 +21,8 @@ ShowTableDialog::~ShowTableDialog()
 }
 
 
-void ShowTableDialog::initUI(Ui::ShowTableDialog *ui)
+//初始化数据模型
+void ShowTableDialog::initUI()
 {
     // The upper part of the UI
     // Create the data model
@@ -45,13 +45,26 @@ void ShowTableDialog::initUI(Ui::ShowTableDialog *ui)
 
     // Populate the model
     if (!model->select()) {
-        showError(model->lastError());
+        showError(model->lastError(),
+                  QString("Unable to initialize Database."
+                          "Error initializing database:"));
         return;
     }
     // Set the model
     ui->DataTable->setModel(model);
 
-    ui->DataTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    //TODO: add AuthorityControl System
+    if(0)//isAuthorityAllow(currentRole)
+    {
+        ui->DataTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    }
+    else
+    {
+        ui->DataTable->setEditTriggers(QAbstractItemView::DoubleClicked);
+    }
+
+
+
     ////////////////委托声明
     ui->DataTable->setItemDelegate(new MaterialDelegate(ui->DataTable));
     ////////////////委托声明
@@ -64,6 +77,9 @@ void ShowTableDialog::initUI(Ui::ShowTableDialog *ui)
     QDataWidgetMapper *mapper = new QDataWidgetMapper(this);
     mapper->setModel(model);
 
+
+    customDataWidget(mapper);
+
     ////////////////委托声明
     mapper->setItemDelegate(new MaterialDelegate(this));
     ////////////////委托声明
@@ -74,7 +90,7 @@ void ShowTableDialog::initUI(Ui::ShowTableDialog *ui)
     ui->DataTable->setCurrentIndex(model->index(0, 0));
 }
 
-
+//获取数据库结构
 void ShowTableDialog::getTableStructure(QString tableName)
 {
     QSqlQuery query;
@@ -87,14 +103,14 @@ void ShowTableDialog::getTableStructure(QString tableName)
     if (query.exec())
     {
         while (query.next())
-        {//QLatin1String
+        {// QLatin1String
             qDebug() << QString(QLatin1String(("Field Count : %1    "
                                                " Field Name : %2    "
                                                " Field Type : %3")))
                         .arg(query.value(0).toString())
                         .arg(query.value(1).toString())
                         .arg(query.value(2).toString());
-            //save the Field Names for self-adaptation
+            // Save the Field Names for self-adaptation
             this->m_fieldName.push_back(query.value(1).toString());
         }
     }
@@ -106,7 +122,23 @@ void ShowTableDialog::getTableStructure(QString tableName)
     return;
 }
 
+//格式化按钮控件
+void ShowTableDialog::stylizeWidget()
+{
+    qDebug() << "searching QPushButton";
+    QList<QPushButton*> Btns = findChildren<QPushButton *>();
+    foreach (QPushButton * btn, Btns)
+    {
+        qDebug() << "setting QPushButton";
+        btn->setStyleSheet("QPushButton { border-radius: 4px; border:none; border-style: outset; }"
+                           "QPushButton:enabled { background: #5BACEB; color: white;}"
+                           "QPushButton:!enabled { background: #5BACEB; color: rgb(200, 200, 200);}"
+                           "QPushButton:hover { background: #7DBDF0;}"
+                           "QPushButton:pressed { background: #5C8BB0; border-style: inset;}");
+    }
+}
 
+//为自定义查询定制列名
 void ShowTableDialog::customColumnName()
 {
     // Remember the indexes of the columns
@@ -126,7 +158,7 @@ void ShowTableDialog::customColumnName()
     model->setHeaderData(model->fieldIndex("MaterialState"), Qt::Horizontal, tr("物资状态"));
 }
 
-
+//根据数据库属性个数, 自适应命名编辑框
 void ShowTableDialog::customDataWidget(QDataWidgetMapper *mapper)
 {
     for(uint16_t i = 0;i < this->m_fieldName.size();i++)
@@ -141,25 +173,23 @@ void ShowTableDialog::customDataWidget(QDataWidgetMapper *mapper)
     }
 }
 
-
-
-void ShowTableDialog::showError(const QSqlError &err)
+//显示 critical 信息
+void ShowTableDialog::showError(const QSqlError &err, const QString errText)
 {
-    QMessageBox::critical(this, "Unable to initialize Database",
-                          "Error initializing database: " + err.text());
+    QMessageBox::critical(this, "Error", errText + err.text());
 }
 
-void ShowTableDialog::stylizeWidget()
+
+void ShowTableDialog::on_CommitButton_clicked()
 {
-    qDebug() << "searching QPushButton";
-    QList<QPushButton*> Btns = findChildren<QPushButton *>();
-    foreach (QPushButton * btn, Btns)
-    {
-         qDebug() << "setting QPushButton";
-         btn->setStyleSheet("QPushButton { border-radius: 4px; border:none; border-style: outset; }"
-                            "QPushButton:enabled { background: #5BACEB; color: white;}"
-                            "QPushButton:!enabled { background: #5BACEB; color: rgb(200, 200, 200);}"
-                            "QPushButton:hover { background: #7DBDF0;}"
-                            "QPushButton:pressed { background: #5C8BB0; border-style: inset;}");
+    model->database().transaction(); //开始事务操作
+    if (model->submitAll()) {
+        model->database().commit(); //提交
+        QMessageBox::information(this, tr("tableModel"), "提交成功");
+    } else {
+        model->database().rollback(); //回滚
+        QMessageBox::warning(this, tr("tableModel"),
+                             tr("数据回滚.数据库错误: %1")
+                             .arg(model->lastError().text()));
     }
 }

@@ -19,28 +19,29 @@ public:
     ~ShowTableDialog();
 
 
+private slots:
+    void on_CommitButton_clicked();
+
 private:
     Ui::ShowTableDialog *ui;
 
     QString m_table_selected = "no table";
-
     QSqlRelationalTableModel *model;
-    void initUI(Ui::ShowTableDialog *ui);
+
+    UserAuthentication needAuthentication;
+    void initUI();
 
     QVector<QString> m_fieldName;
     void getTableStructure(QString tableName);
-    void customColumnName();
-    void customDataWidget(QDataWidgetMapper *mapper);
-    void showError(const QSqlError &err);
 
     void stylizeWidget();
 
+    void customColumnName();
 
-    //middleware
-    inline boolean authentication(UserAuthentication neededAuthority, UserAuthentication currentAuthority)
-    {
-        return (neededAuthority == currentAuthority ) ? TRUE : FALSE;
-    }
+    void customDataWidget(QDataWidgetMapper *mapper);
+
+    void showError(const QSqlError &err, const QString errText);
 };
+
 
 #endif // SHOWMATERIALDIALOG_H

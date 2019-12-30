@@ -32,9 +32,9 @@ typedef  signed char        int8;        /* Signed 8  bit value */
 //---------------------------------//
 
 #define ADMIN 9
-#define Manager 5
-#define Member 2
-#define Visitor 1
+#define MANAGER 5
+#define MEMBER 2
+#define VISITOR 1
 
 //---------------------------------//
 
@@ -46,14 +46,12 @@ typedef  signed char        int8;        /* Signed 8  bit value */
 
 //---------------------------------//
 
-
 #define  MAX( x, y ) ( ((x) > (y)) ? (x) : (y) )
 #define  MIN( x, y ) ( ((x) < (y)) ? (x) : (y) )
 
 //---------------------------------//
 
 #define SETPUSHBUTTON(tyleSheet) ()
-
 
 //---------------------------------//
 

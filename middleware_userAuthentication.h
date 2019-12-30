@@ -8,6 +8,8 @@ class UserAuthentication
 {
 public:
     UserAuthentication();
+
+    UserAuthentication(QString currentRole);
 private:
     //organization组织
     QString m_organization;
@@ -16,11 +18,15 @@ private:
     //identify 身份 (parent : apartment)
     QString m_identify;
     //user group 用户组
-    QString m_userGroup;
+    qint16 m_userGroup;
     // custom authentication 自定义权限列表
 
-
-    bool operator==(UserAuthentication &temp_authe);
+    //用户身份认证
+    //Attention : it should be used in a authority system (R(resource)BAC)
+    // to waste less time, I use isPermisiionAllow() instead.
+    boolean isAuthorityAllow(qint16 currentRole);
+    //授权
+    boolean isPermisiionAllow(qint16 currentUserGroup);
 
 };
 

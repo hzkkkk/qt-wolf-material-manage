@@ -28,24 +28,24 @@ SOURCES += \
     view_startPage.cpp \
     view_aboutDialog.cpp \
     control_materialDelegate.cpp \
-    model_showTableDialog.cpp \
     model_accessDatabase.cpp \
     config_configuration.cpp \
-    middleware_userAuthentication.cpp
+    middleware_userAuthentication.cpp \
+    control_showTableDialog.cpp
 
 HEADERS += \
     middleware_userAuthentication.h \
     view_startPage.h \
     view_aboutDialog.h \
     control_materialDelegate.h \
-    model_showTableDialog.h \
     model_accessDatabase.h \
-    config_configuration.h
+    config_configuration.h \
+    control_showTableDialog.h
 
 FORMS += \
     view_aboutDialog.ui \
     view_startPage.ui \
-    model_showTableDialog.ui
+    control_showTableDialog.ui
 
 
 RESOURCES   =  material.qrc

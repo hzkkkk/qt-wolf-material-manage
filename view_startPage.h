@@ -4,7 +4,7 @@
 #include <QMainWindow>
 
 #include "config_configuration.h"
-#include "model_showTableDialog.h"
+#include "control_showTableDialog.h"
 
 #include "view_aboutDialog.h"
 
