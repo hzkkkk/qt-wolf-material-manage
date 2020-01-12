@@ -6,7 +6,6 @@ QSqlDatabase model_Database::s_db = QSqlDatabase::addDatabase(DATABASEDRIVER);
 
 model_Database::model_Database()
 {}
-
 QSqlError model_Database::initDatabase()
 {
     if (!QSqlDatabase::drivers().contains(DATABASEDRIVER))
@@ -140,6 +139,10 @@ QSqlError model_Database::initDatabase()
     {
         //本地数据库
         s_db.setDatabaseName("materialhouse");
+        s_db.setPort(3306);
+        s_db.setHostName("localhost");
+        s_db.setUserName("root");
+        s_db.setPassword("");
         return QSqlError();
         //...//
 

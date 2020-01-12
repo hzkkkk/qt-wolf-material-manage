@@ -2,6 +2,8 @@
 #define MIDDLEWARE_USERAUTHENTICATION_H
 
 #include <qstring.h>
+#include <QtSql>
+#include <QtWidgets>
 #include "config_configuration.h"
 
 class UserAuthentication
@@ -10,6 +12,13 @@ public:
     UserAuthentication();
 
     UserAuthentication(QString currentRole);
+
+
+    //用户身份认证
+    //Attention : it should be used in a authority system (R(resource)BAC)
+    // to waste less time, I use isPermisiionAllow() instead.
+    static int8 isAuthorityAllow(QString currentTable, QString neededOperation, qint16 currentRoleID);
+
 private:
     //organization组织
     QString m_organization;
@@ -21,10 +30,7 @@ private:
     qint16 m_userGroup;
     // custom authentication 自定义权限列表
 
-    //用户身份认证
-    //Attention : it should be used in a authority system (R(resource)BAC)
-    // to waste less time, I use isPermisiionAllow() instead.
-    boolean isAuthorityAllow(qint16 currentRole);
+
     //授权
     boolean isPermisiionAllow(qint16 currentUserGroup);
 

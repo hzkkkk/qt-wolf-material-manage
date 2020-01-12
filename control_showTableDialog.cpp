@@ -15,6 +15,7 @@ ShowTableDialog::ShowTableDialog(QWidget *parent, QString table_selected) :
     stylizeWidget();
 }
 
+
 ShowTableDialog::~ShowTableDialog()
 {
     delete ui;
@@ -54,7 +55,9 @@ void ShowTableDialog::initUI()
     ui->DataTable->setModel(model);
 
     //TODO: add AuthorityControl System
-    if(0)//isAuthorityAllow(currentRole)
+    //isAuthorityAllow(currentRole);
+
+    if(0)           //isAuthorityAllow(currentRole)
     {
         ui->DataTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     }
@@ -62,8 +65,6 @@ void ShowTableDialog::initUI()
     {
         ui->DataTable->setEditTriggers(QAbstractItemView::DoubleClicked);
     }
-
-
 
     ////////////////委托声明
     ui->DataTable->setItemDelegate(new MaterialDelegate(ui->DataTable));
@@ -94,12 +95,19 @@ void ShowTableDialog::initUI()
 void ShowTableDialog::getTableStructure(QString tableName)
 {
     QSqlQuery query;
-    QString strTableNmae = tableName;
-    QString str = "PRAGMA table_info(" + strTableNmae + ")";
+    QString strTableName = tableName;
+    QString sql;
 
+    if(DATABASEDRIVER == "QSQLITE")
+        sql = "PRAGMA table_info(" + strTableName + ")";
+    else if(DATABASEDRIVER == "QMYSQL")
+        sql = "select ORDINAL_POSITION, COLUMN_NAME, DATA_TYPE from information_schema.COLUMNS where table_name =  '" + strTableName + "'";
+
+    qDebug() << sql;
     qDebug() << QString(QString::fromLocal8Bit("Running getTableStructure"));
 
-    query.prepare(str);
+    query.prepare(sql);
+
     if (query.exec())
     {
         while (query.next())
@@ -145,7 +153,7 @@ void ShowTableDialog::customColumnName()
     //    authorIdx = model->fieldIndex("author");
     //    genreIdx = model->fieldIndex("genre");
 
-    //    // Set the relations to the other database tables
+    //    // Set the relations to the other dat`abase tables
     //    model->setRelation(authorIdx, QSqlRelation("authors", "id", "name"));
     //    model->setRelation(genreIdx, QSqlRelation("genres", "id", "name"));
 
@@ -161,19 +169,28 @@ void ShowTableDialog::customColumnName()
 //根据数据库属性个数, 自适应命名编辑框
 void ShowTableDialog::customDataWidget(QDataWidgetMapper *mapper)
 {
+    QGridLayout* gridLayout = ui->gridLayout; //根据子控件的名称查找子控件
+
     for(uint16_t i = 0;i < this->m_fieldName.size();i++)
     {
-        QLineEdit* lineEdit = findChild<QLineEdit*>("No"+ QString::number(i + 1) + "Edit");
-        QLabel* label = findChild<QLabel*>("No"+ QString::number(i + 1) + "Label");
-        if(lineEdit != NULL)
-        {
-            mapper->addMapping(lineEdit, model->fieldIndex(m_fieldName.at(i)));
-            label->setText(m_fieldName.at(i));
-        }
+        QLineEdit* lineEdit = new QLineEdit("this");
+        gridLayout->addWidget(lineEdit);//把Button放入Layout中
     }
+
+
+//    for(uint16_t i = 0;i < this->m_fieldName.size();i++)
+//    {
+//        QLineEdit* lineEdit = findChild<QLineEdit*>("No"+ QString::number(i + 1) + "Edit");
+//        QLabel* label = findChild<QLabel*>("No"+ QString::number(i + 1) + "Label");
+//        if(lineEdit != NULL)
+//        {
+//            mapper->addMapping(lineEdit, model->fieldIndex(m_fieldName.at(i)));
+//            label->setText(m_fieldName.at(i));
+//        }
+//    }
 }
 
-//显示 critical 信息
+// 出现error 显示 critical 信息
 void ShowTableDialog::showError(const QSqlError &err, const QString errText)
 {
     QMessageBox::critical(this, "Error", errText + err.text());

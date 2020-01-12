@@ -4,8 +4,9 @@
 #include <QMainWindow>
 
 #include "config_configuration.h"
-#include "control_showTableDialog.h"
+#include "middleware_userAuthentication.h"
 
+#include "control_showTableDialog.h"
 #include "view_aboutDialog.h"
 
 namespace Ui {
@@ -36,6 +37,8 @@ private slots:
     void on_action_showMaterialDetailDialog_triggered();
 
 
+
+    void AuthorityControl(QString neededTable);
 
     void on_action_aboutDialog_triggered();
 
